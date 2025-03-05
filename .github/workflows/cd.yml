@@ -28,9 +28,4 @@ jobs:
 
       - name: 🚀 Deploy para o Supabase
         run: |
-          curl -X POST "${{ secrets.SUPABASE_URL }}" \
-          -H "Authorization: Bearer ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}" \
-          -H "Content-Type: application/json" \
-          -d '{
-            "image": "ghcr.io/meu-usuario/priorify-backend:latest"
-          }'
+          npx supabase db push
