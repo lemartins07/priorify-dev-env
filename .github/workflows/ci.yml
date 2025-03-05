@@ -1,0 +1,50 @@
+name: CI - Backend
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: priorify
+          POSTGRES_PASSWORD: priorify123
+          POSTGRES_DB: priorify
+        ports:
+          - "5432:5432"
+
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🛠️ Configurar Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: 📦 Instalar dependências
+        run: npm install
+        working-directory: backend
+
+      - name: 🔍 Rodar ESLint para validar código
+        run: npm run lint
+        working-directory: backend
+
+      - name: 🔄 Rodar testes automatizados
+        run: npm run test
+        working-directory: backend
+
+      - name: 🐳 Construir imagem Docker (validação)
+        run: docker build -t priorify-backend .
+        working-directory: backend
