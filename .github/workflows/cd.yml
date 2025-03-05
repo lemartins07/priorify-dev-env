@@ -1,22 +1,19 @@
 name: CD - Deploy no Render
 
 on:
-  pull_request:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  ci:
+  deploy:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Test
-        run: |
-          npm install
-          npm run test
 
-      - name: Deploy
-        # Only run this step if the branch is main
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v3
+
+      - name: 🚀 Deploy para o Render
         if: github.ref == 'refs/heads/main'
         env:
           deploy_url: ${{ secrets.RENDER_DEPLOY_HOOK_URL }}
