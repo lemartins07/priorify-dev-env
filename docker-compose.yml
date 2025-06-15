@@ -1,7 +1,6 @@
-
 services:
   backend:
-    build: ./backend
+    build: ../backend
     container_name: priorify-backend
     restart: always
     ports:
@@ -10,13 +9,13 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      DATABASE_URL: postgresql://priorify:priorify123@postgres:5432/priorify   
+      DATABASE_URL: postgresql://priorify:priorify123@postgres:5432/priorify
     volumes:
-      - ./backend:/app
+      - ../backend:/app
       - /app/node_modules
     command: npm run start:dev
   frontend:
-    build: ./frontend
+    build: ../frontend
     container_name: priorify-frontend
     restart: always
     ports:
@@ -26,7 +25,7 @@ services:
     environment:
       NEXT_PUBLIC_API_URL: http://priorify-backend:4000
     volumes:
-      - ./frontend:/app
+      - ../frontend:/app
       - /app/node_modules
   postgres:
     image: postgres:15
@@ -41,7 +40,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U priorify"]
+      test: [ "CMD-SHELL", "pg_isready -U priorify" ]
       interval: 5s
       retries: 5
       timeout: 5s
